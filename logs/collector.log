@@ -1,0 +1,37 @@
+2026-11-03 18:03:34,412 [INFO] 数据采集开始运行
+2026-11-03 18:03:34,421 [INFO] === 开始采集行情数据，共 5 只股票 ===
+2026-11-03 18:03:34,421 [INFO] 正在采集 000001...
+2026-11-03 18:03:35,368 [ERROR]   000001 失败：('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-03 18:03:35,368 [INFO] 正在采集 600519...
+2026-11-03 18:03:35,929 [ERROR]   600519 失败：('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-03 18:03:35,929 [INFO] 正在采集 000858...
+2026-11-03 18:03:36,549 [ERROR]   000858 失败：('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-03 18:03:36,549 [INFO] 正在采集 601318...
+2026-11-03 18:03:37,185 [ERROR]   601318 失败：('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-03 18:03:37,185 [INFO] 正在采集 300750...
+2026-11-03 18:03:37,814 [ERROR]   300750 失败：('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-11-03 18:03:37,814 [INFO] === 行情采集完成 ===
+
+2026-11-03 18:03:37,814 [INFO] === 开始采集新闻 ===
+2026-11-03 18:03:38,458 [INFO]   东方财富新闻：10 条
+2026-11-03 18:03:39,459 [INFO] === 新闻采集完成 ===
+
+2026-11-03 18:03:39,460 [INFO] === 开始采集财报 ===
+2026-11-03 18:03:39,460 [INFO] 正在采集 000001 财报...
+2026-11-03 18:03:43,542 [ERROR]   000001 财报失败：could not convert string to float: '4302.00万'
+2026-11-03 18:03:43,542 [INFO] 正在采集 600519 财报...
+2026-11-03 18:03:46,088 [ERROR]   600519 财报失败：could not convert string to float: '6.28亿'
+2026-11-03 18:03:46,088 [INFO] 正在采集 000858 财报...
+2026-11-03 18:03:49,463 [ERROR]   000858 财报失败：could not convert string to float: '9.15亿'
+2026-11-03 18:03:49,463 [INFO] 正在采集 601318 财报...
+2026-11-03 18:03:51,300 [ERROR]   601318 财报失败：could not convert string to float: '636.97亿'
+2026-11-03 18:03:51,300 [INFO] 正在采集 300750 财报...
+2026-11-03 18:03:53,100 [ERROR]   300750 财报失败：could not convert string to float: '8.67亿'
+2026-11-03 18:03:53,100 [INFO] === 财报采集完成 ===
+
+2026-11-03 18:03:53,100 [INFO] ==================================================
+2026-11-03 18:03:53,101 [INFO]   market_data: 0 条
+2026-11-03 18:03:53,101 [INFO]   news_data: 10 条
+2026-11-03 18:03:53,101 [INFO]   financial_data: 0 条
+2026-11-03 18:03:53,101 [INFO] ==================================================
+2026-11-03 18:03:53,101 [INFO] 采集全部完成！
