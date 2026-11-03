@@ -1,0 +1,10 @@
+# 项目依赖包
+# 安装方法：pip install -r requirements.txt
+
+akshare>=1.12.0        # A股数据接口（免费，不需要注册）
+pandas>=2.0.0          # 数据处理
+pyyaml>=6.0            # 读取配置文件
+requests>=2.31.0       # 网络请求（爬网页用）
+beautifulsoup4>=4.12.0 # 解析网页HTML
+schedule>=1.2.0        # 定时任务调度
+lxml>=4.9.0            # BeautifulSoup 的解析引擎
