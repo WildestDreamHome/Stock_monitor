@@ -50,6 +50,60 @@ def init_database(db_path):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS market_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            stock_code TEXT NOT NULL,
+            stock_name TEXT,
+            date TEXT NOT NULL,
+            open_price REAL,
+            close_price REAL,
+            high_price REAL,
+            low_price REAL,
+            volume REAL,
+            amount REAL,
+            turnover_rate REAL,
+            change_pct REAL,
+            collected_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(stock_code, date)
+        )
+    """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS news_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            content TEXT,
+            source TEXT,
+            url TEXT,
+            publish_time TEXT,
+            related_stocks TEXT,
+            sentiment_score REAL,
+            collected_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(title, publish_time)
+        )
+    """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS financial_data (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            stock_code TEXT NOT NULL,
+            stock_name TEXT,
+            report_date TEXT,
+            total_revenue REAL,
+            net_profit REAL,
+            total_assets REAL,
+            total_liabilities REAL,
+            eps REAL,
+            roe REAL,
+            collected_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(stock_code, report_date)
+        )
+    """)
+    
+    conn.commit()
+    return conn
+    
     # 股票行情表
     cursor.execute(""" CREATE TABLE IF NOT EXISTS market_data ( id INTEGER PRIMARY KEY AUTOINCREMENT, stock_code TEXT NOT NULL, -- 股票代码 stock_name TEXT, -- 股票名称 date TEXT NOT NULL, -- 日期 open_price REAL, -- 开盘价 close_price REAL, -- 收盘价 high_price REAL, -- 最高价 low_price REAL, -- 最低价 volume REAL, -- 成交量（手） amount REAL, -- 成交额（元） turnover_rate REAL, -- 换手率 change_pct REAL, -- 涨跌幅(%) collected_at TEXT DEFAULT CURRENT_TIMESTAMP, -- 采集时间 UNIQUE(stock_code, date) -- 同一只股票同一天只存一条 ) """)
     
