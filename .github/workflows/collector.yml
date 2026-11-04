@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   collect-data:
@@ -24,12 +26,14 @@ jobs:
       run: pip install -r requirements.txt
     - name: 采集数据
       run: python collector.py
+    - name: 生成网页
+      run: python generate_report.py
     - name: 保存数据到仓库
       run: |
         git config user.name "GitHub Actions Bot"
         git config user.email "actions@github.com"
-        git add data/stock_data.db logs/collector.log
-        git commit -m "自动更新数据 $(date +'%Y-%m-%d %H:%M')" || echo "没有新数据"
+        git add data/stock_data.db logs/collector.log docs/
+        git commit -m "自动更新 $(date +'%Y-%m-%d %H:%M')" || echo "没有新数据"
         git push
     - name: 上传日志
       if: always()
@@ -38,3 +42,12 @@ jobs:
         name: collector-logs
         path: logs/collector.log
         retention-days: 7
+
+  deploy:
+    needs: collect-data
+    runs-on: ubuntu-latest
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+    - name: 部署到 GitHub Pages
+      uses: actions/deploy-pages@v4
