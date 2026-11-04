@@ -1,53 +1,31 @@
-# 股票监控系统配置文件
-# 这个文件用来设置你要追踪哪些股票，以及系统怎么运行
-
-# 要追踪的股票列表（A股代码）
-# 格式：代码: 名称（名称只是备注，不影响功能）
 stocks:
-  - code: "000001"  # 平安银行
-  - code: "600519"  # 贵州茅台
-  - code: "000858"  # 五粮液
-  - code: "601318"  # 中国平安
-  - code: "300750"  # 宁德时代
+  - code: "000001"
+    name: "平安银行"
+  - code: "600519"
+    name: "贵州茅台"
+  - code: "000858"
+    name: "五粮液"
+  - code: "601318"
+    name: "中国平安"
+  - code: "300750"
+    name: "宁德时代"
 
-# 数据采集设置
 collection:
-  # 是否采集股票行情数据（价格、成交量等）
   enable_market_data: true
-  
-  # 是否采集新闻数据
   enable_news: true
-  
-  # 是否采集财报数据
   enable_financial_reports: true
-  
-  # 行情数据回溯天数（获取多少天的历史数据）
   history_days: 30
 
-# 自动化设置
 automation:
-  # 自动采集间隔（分钟）- 建议设置大一些，比如60分钟采集一次
-  # 太频繁可能被网站封IP
   interval_minutes: 60
-  
-  # 每天自动运行的时间段（24小时制）
-  # 股市交易时间是9:30-15:00，我们设置8:00-16:00运行
   start_hour: 8
   end_hour: 16
 
-# 数据存储设置
 storage:
-  # 数据库文件路径（SQLite，轻量级数据库，不需要额外安装）
   database_path: "data/stock_data.db"
-  
-  # 日志文件路径
   log_path: "logs/collector.log"
 
-# 通知设置（可选，后续可以扩展）
 notification:
-  # 是否启用邮件通知
   enable_email: false
   email_address: ""
-  
-  # 是否启用微信通知（需要配合Server酱等服务）
   enable_wechat: false
