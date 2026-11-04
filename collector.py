@@ -33,8 +33,9 @@ def collect_market_data(conn, config, logger):
     logger.info(f"=== 开始采集行情数据，共 {len(stocks)} 只股票 ===")
     for s in stocks:
         code = s["code"]
+        name = s.get("name", "")
         try:
-            logger.info(f"正在采集 {code}...")
+            logger.info(f"正在采集 {code} {name}...")
             df = ak.stock_zh_a_hist(symbol=code, period="daily", start_date=sd, end_date=ed, adjust="qfq")
             if df is None or df.empty:
                 logger.warning(f"  {code} 无数据")
@@ -42,10 +43,10 @@ def collect_market_data(conn, config, logger):
             cnt = 0
             for _, row in df.iterrows():
                 c.execute("INSERT OR REPLACE INTO market_data (stock_code,stock_name,date,open_price,close_price,high_price,low_price,volume,amount,turnover_rate,change_pct) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                    (code, "", str(row["日期"]), float(row["开盘"]), float(row["收盘"]), float(row["最高"]), float(row["最低"]), float(row["成交量"]), float(row["成交额"]), float(row.get("换手率",0)), float(row.get("涨跌幅",0))))
+                    (code, name, str(row["日期"]), float(row["开盘"]), float(row["收盘"]), float(row["最高"]), float(row["最低"]), float(row["成交量"]), float(row["成交额"]), float(row.get("换手率",0)), float(row.get("涨跌幅",0))))
                 cnt += 1
             conn.commit()
-            logger.info(f"  {code} 完成，{cnt} 条")
+            logger.info(f"  {code} {name} 完成，{cnt} 条")
             time.sleep(1.5)
         except Exception as e:
             logger.error(f"  {code} 失败：{e}")
@@ -78,19 +79,20 @@ def collect_financial_data(conn, config, logger):
     logger.info("=== 开始采集财报 ===")
     for s in config["stocks"]:
         code = s["code"]
+        name = s.get("name", "")
         try:
-            logger.info(f"正在采集 {code} 财报...")
+            logger.info(f"正在采集 {code} {name} 财报...")
             df = ak.stock_financial_abstract_ths(symbol=code, indicator="按年度")
             if df is not None and not df.empty:
                 for _, row in df.head(4).iterrows():
                     c.execute("INSERT OR REPLACE INTO financial_data (stock_code,stock_name,report_date,total_revenue,net_profit,eps,roe) VALUES (?,?,?,?,?,?,?)",
-                        (code, "", str(row.get("报告期","")),
+                        (code, name, str(row.get("报告期","")),
                          float(str(row.get("营业总收入","0")).replace(",","")) if row.get("营业总收入") else None,
                          float(str(row.get("净利润","0")).replace(",","")) if row.get("净利润") else None,
                          float(str(row.get("每股收益","0")).replace(",","")) if row.get("每股收益") else None,
                          float(str(row.get("净资产收益率","0")).replace("%","")) if row.get("净资产收益率") else None))
                 conn.commit()
-                logger.info(f"  {code} 财报完成")
+                logger.info(f"  {code} {name} 财报完成")
             time.sleep(2)
         except Exception as e:
             logger.error(f"  {code} 财报失败：{e}")
@@ -102,9 +104,9 @@ def generate_summary(conn, logger):
     for t in ["market_data","news_data","financial_data"]:
         c.execute(f"SELECT COUNT(*) FROM {t}")
         logger.info(f"  {t}: {c.fetchone()[0]} 条")
-    c.execute("SELECT stock_code,date,close_price,change_pct FROM market_data WHERE date=(SELECT MAX(date) FROM market_data) ORDER BY change_pct DESC")
+    c.execute("SELECT stock_code,stock_name,date,close_price,change_pct FROM market_data WHERE date=(SELECT MAX(date) FROM market_data) ORDER BY change_pct DESC")
     for r in c.fetchall():
-        logger.info(f"  {r[0]} | {r[1]} | 收盘:{r[2]} | 涨跌:{r[3]}%")
+        logger.info(f"  {r[0]} {r[1]} | {r[2]} | 收盘:{r[3]} | 涨跌:{r[4]}%")
     logger.info("=" * 50)
 
 def run_collection():
